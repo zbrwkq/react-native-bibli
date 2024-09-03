@@ -1,6 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = ({ navigation }) => {
   const [books, setBooks] = useState([]);
@@ -8,15 +17,18 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const storedBooks = await AsyncStorage.getItem('books');
+        const storedBooks = await AsyncStorage.getItem("books");
         setBooks(JSON.parse(storedBooks));
       } catch (error) {
-        console.log('Une erreur est survenue lors de la récupération des livres', error);
+        console.log(
+          "Une erreur est survenue lors de la récupération des livres",
+          error
+        );
       }
     };
 
     fetchBooks();
-  }, [AsyncStorage.getItem('books')]);
+  }, [AsyncStorage.getItem("books")]);
 
   const confirmDelete = (bookId) => {
     Alert.alert(
@@ -24,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
       "Êtes-vous sûr de vouloir supprimer ce livre?",
       [
         { text: "Annuler", style: "cancel" },
-        { text: "Supprimer", onPress: () => deleteBook(bookId) }
+        { text: "Supprimer", onPress: () => deleteBook(bookId) },
       ]
     );
   };
@@ -33,9 +45,12 @@ const HomeScreen = ({ navigation }) => {
     try {
       const updatedBooks = books.filter((book) => book.id !== bookId);
       setBooks(updatedBooks);
-      await AsyncStorage.setItem('books', JSON.stringify(updatedBooks));
+      await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
     } catch (error) {
-      console.log('Une erreur est survenue lors de la suppression du livre', error);
+      console.log(
+        "Une erreur est survenue lors de la suppression du livre",
+        error
+      );
     }
   };
 
@@ -46,7 +61,14 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.author}>par {item.author}</Text>
         <View style={styles.buttons}>
-          <Button title="Modifier" />
+          <Button
+            title="Modifier"
+            onPress={() =>
+              navigation.navigate("Update", {
+                bookId: item.id,
+              })
+            }
+          />
           <Button title="Supprimer" onPress={() => confirmDelete(item.id)} />
         </View>
       </View>
@@ -55,13 +77,10 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={books}
-        renderItem={renderBookItem}
-      />
+      <FlatList data={books} renderItem={renderBookItem} />
       <Button
         title="Ajouter un livre"
-        onPress={() => navigation.navigate('AddBook')}
+        onPress={() => navigation.navigate("AddBook")}
       />
 
       <Text style={styles.templateAuthor}>Stylisé par Romain</Text>
@@ -71,19 +90,19 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   templateAuthor: {
-   fontSize: 18, 
-   fontWeight: 'bold',
-   textAlign: 'center',
-   paddingVertical: 16,
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingVertical: 16,
   },
   container: {
     flex: 1,
     padding: 16,
   },
   bookItem: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 16,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: "#f8f8f8",
     padding: 10,
     borderRadius: 8,
   },
@@ -94,30 +113,30 @@ const styles = StyleSheet.create({
   },
   bookDetails: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   author: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginBottom: 8,
   },
   buttons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   addButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: "#007bff",
     padding: 15,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 20,
   },
   addButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
   },
 });
