@@ -82,19 +82,20 @@ export default function AddBookScreen({ navigation }) {
         onChangeText={setCoverImage}
       />
 
-      {coverImage ? (
-        <Image
-          source={{ uri: coverImage }}
-          style={styles.coverImage}
-        />
-      ) : null}
-
       <Button title="Ajouter" onPress={addBook} />
+
+      <Text style={styles.templateAuthor}>Stylisé par Nathan</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  templateAuthor: {
+    fontSize: 18, 
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingVertical: 16,
+   },
   container: {
     flex: 1,
     padding: 20,
