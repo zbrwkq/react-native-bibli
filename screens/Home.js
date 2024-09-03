@@ -16,7 +16,7 @@ const HomeScreen = ({ navigation }) => {
     };
 
     fetchBooks();
-  }, []);
+  }, [AsyncStorage.getItem('books')]);
 
   const confirmDelete = (bookId) => {
     Alert.alert(
@@ -59,9 +59,10 @@ const HomeScreen = ({ navigation }) => {
         data={books}
         renderItem={renderBookItem}
       />
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Ajouter un Livre</Text>
-      </TouchableOpacity>
+      <Button
+        title="Ajouter un livre"
+        onPress={() => navigation.navigate('AddBook')}
+      />
 
       <Text style={styles.templateAuthor}>Stylisé par Romain</Text>
     </View>

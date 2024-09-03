@@ -22,6 +22,11 @@ export default function AddBookScreen({ navigation }) {
       try {
         const storedBooks = await AsyncStorage.getItem('books');
         const books = storedBooks ? JSON.parse(storedBooks) : [];
+        
+        const lastId = books.length ? Math.max(...books.map(book => book.id)) : 0;
+        const newId = lastId + 1;
+        newBook.id = newId;
+        
         const updatedBooks = [...books, newBook];
         await AsyncStorage.setItem('books', JSON.stringify(updatedBooks));
 
