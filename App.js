@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/Home';
+import AddBookScreen from './screens/AddBookScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,11 @@ const App = () => {
           name="Home"
           component={HomeScreen}
           options={{ title: 'Écran d\'Accueil' }}
+        />
+        <Stack.Screen
+          name="AddBook"
+          component={AddBookScreen}
+          options={{ title: 'Ajouter un livre' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
