@@ -30,9 +30,6 @@ const DetailsScreen = ({ route, navigation }) => {
         const response = await axios.get(`http://192.168.1.19:5000/books/${bookId}`);
         
         if (response) {
-          console.log("RESPONSE DATA")
-          console.log(response.data)
-          console.log("RESPONSE DATA")
           setBook(response.data)
           setBookInput(response.data);
         } else {
