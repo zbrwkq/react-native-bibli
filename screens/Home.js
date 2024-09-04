@@ -1,36 +1,28 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Text, FlatList, Image, Button, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }) => {
   const [books, setBooks] = useState([]);
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      console.log("test1");
-      try {
-        console.log("test2");
-        const response = await axios.get("http://192.168.1.20:5000/books");
-        setBooks(response.data);
-      } catch (error) {
-        console.log(
-          "Une erreur est survenue lors de la récupération des livres",
-          error
-        );
-      }
-    };
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get("http://192.168.1.102:5000/books");
+      setBooks(response.data);
+    } catch (error) {
+      console.log(
+        "Une erreur est survenue lors de la récupération des livres",
+        error
+      );
+    }
+  };
 
-    fetchBooks();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchBooks();
+    }, [])
+  );
 
   const confirmDelete = (bookId) => {
     Alert.alert(
