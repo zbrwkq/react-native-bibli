@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const HomeScreen = ({ navigation }) => {
   const [books, setBooks] = useState([]);
@@ -17,18 +17,15 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const storedBooks = await AsyncStorage.getItem("books");
-        setBooks(JSON.parse(storedBooks));
+        const response = await axios.get('http://192.168.1.102:5000/books');
+        setBooks(response.data);
       } catch (error) {
-        console.log(
-          "Une erreur est survenue lors de la récupération des livres",
-          error
-        );
+        console.log("Une erreur est survenue lors de la récupération des livres", error);
       }
     };
 
     fetchBooks();
-  }, [AsyncStorage.getItem("books")]);
+  }, []);
 
   const confirmDelete = (bookId) => {
     Alert.alert(
@@ -43,21 +40,18 @@ const HomeScreen = ({ navigation }) => {
 
   const deleteBook = async (bookId) => {
     try {
+      await axios.delete(`http://192.168.1.102:5000/books/${bookId}`);
       const updatedBooks = books.filter((book) => book.id !== bookId);
       setBooks(updatedBooks);
-      await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
     } catch (error) {
-      console.log(
-        "Une erreur est survenue lors de la suppression du livre",
-        error
-      );
+      console.log("Une erreur est survenue lors de la suppression du livre", error);
     }
   };
 
   const renderBookItem = ({ item }) => (
     <TouchableOpacity
-    onPress={() => navigation.navigate('Details', { bookId: item.id })} // Navigue vers l'écran "Details" avec l'ID du livre
-    style={styles.bookItemButton}
+      onPress={() => navigation.navigate('Details', { bookId: item.id })} // Navigue vers l'écran "Details" avec l'ID du livre
+      style={styles.bookItemButton}
     >
       <View style={styles.bookItem}>
         <Image source={{ uri: item.cover }} style={styles.coverImage} />
@@ -87,7 +81,6 @@ const HomeScreen = ({ navigation }) => {
         title="Ajouter un livre"
         onPress={() => navigation.navigate("AddBook")}
       />
-
       <Text style={styles.templateAuthor}>Stylisé par Romain</Text>
     </View>
   );
