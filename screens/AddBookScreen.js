@@ -1,43 +1,51 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from "react";
+import { View, Text, TextInput, Button, StyleSheet, Image } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AddBookScreen({ navigation }) {
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [year, setYear] = useState('');
-  const [description, setDescription] = useState('');
-  const [coverImage, setCoverImage] = useState('');
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [year, setYear] = useState("");
+  const [description, setDescription] = useState("");
+  const [cover, setCover] = useState("");
 
   const addBook = async () => {
-    if (title.trim() && author.trim() && year.trim() && description.trim() && coverImage.trim()) {
+    if (
+      title.trim() &&
+      author.trim() &&
+      year.trim() &&
+      description.trim() &&
+      cover.trim()
+    ) {
       const newBook = {
         title,
         author,
         year,
         description,
-        coverImage,
+        cover,
       };
 
       try {
-        const storedBooks = await AsyncStorage.getItem('books');
+        const storedBooks = await AsyncStorage.getItem("books");
         const books = storedBooks ? JSON.parse(storedBooks) : [];
-        
-        const lastId = books.length ? Math.max(...books.map(book => book.id)) : 0;
+
+        const lastId = books.length
+          ? Math.max(...books.map((book) => book.id))
+          : 0;
         const newId = lastId + 1;
         newBook.id = newId;
-        
-        const updatedBooks = [...books, newBook];
-        await AsyncStorage.setItem('books', JSON.stringify(updatedBooks));
 
-        setTitle('');
-        setAuthor('');
-        setYear('');
-        setDescription('');
-        setCoverImage('');
+        const updatedBooks = [...books, newBook];
+        await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
+
+        setTitle("");
+        setAuthor("");
+        setYear("");
+        setDescription("");
+        setCover("");
         navigation.goBack();
       } catch (error) {
-        console.error('Erreur lors de l\'enregistrement des livres', error);
+        console.error("Erreur lors de l'enregistrement des livres", error);
       }
     }
   };
@@ -78,8 +86,8 @@ export default function AddBookScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="URL de l'image de couverture"
-        value={coverImage}
-        onChangeText={setCoverImage}
+        value={cover}
+        onChangeText={setCover}
       />
 
       <Button title="Ajouter" onPress={addBook} />
@@ -91,25 +99,25 @@ export default function AddBookScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   templateAuthor: {
-    fontSize: 18, 
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
     paddingVertical: 16,
-   },
+  },
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   header: {
     fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 20,
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     paddingHorizontal: 8,
     marginBottom: 10,
@@ -118,6 +126,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 150,
     marginVertical: 10,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 });
