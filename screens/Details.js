@@ -61,11 +61,19 @@ const DetailsScreen = ({ route, navigation }) => {
           <Text style={styles.buttonText}>Supprimer</Text>
         </TouchableOpacity>
       </View>
+
+      <Text style={styles.templateAuthor}>Stylisé par Corentin</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  templateAuthor: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingVertical: 16,
+  },
   container: {
     flex: 1,
     padding: 20,
