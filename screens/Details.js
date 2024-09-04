@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, FlatList, Text, StyleSheet } from 'react-native';
 
 const DetailsScreen = ({route, navigation}) => {
@@ -19,7 +19,7 @@ const DetailsScreen = ({route, navigation}) => {
     const fetchBookById = async () => {
       const storedBooks = await AsyncStorage.getItem('books');
       const books = JSON.parse(storedBooks) || [];
-      const selectedBook = books.find((b) => b.id === itemId);
+      const selectedBook = books.find((b) => b.id === bookId);
       setBook(selectedBook);
     };
 

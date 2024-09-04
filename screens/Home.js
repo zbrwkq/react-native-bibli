@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const HomeScreen = ({ navigation }) => {
   const [books, setBooks] = useState([]);
 
-  useEffect(() => {
+  useEffect(async () => {
     const fetchBooks = async () => {
       try {
         const storedBooks = await AsyncStorage.getItem("books");
