@@ -16,11 +16,16 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     const fetchBooks = async () => {
+      console.log("test1");
       try {
-        const response = await axios.get('http://192.168.1.102:5000/books');
+        console.log("test2");
+        const response = await axios.get("http://192.168.1.20:5000/books");
         setBooks(response.data);
       } catch (error) {
-        console.log("Une erreur est survenue lors de la récupération des livres", error);
+        console.log(
+          "Une erreur est survenue lors de la récupération des livres",
+          error
+        );
       }
     };
 
@@ -44,13 +49,16 @@ const HomeScreen = ({ navigation }) => {
       const updatedBooks = books.filter((book) => book.id !== bookId);
       setBooks(updatedBooks);
     } catch (error) {
-      console.log("Une erreur est survenue lors de la suppression du livre", error);
+      console.log(
+        "Une erreur est survenue lors de la suppression du livre",
+        error
+      );
     }
   };
 
   const renderBookItem = ({ item }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Details', { bookId: item.id })} // Navigue vers l'écran "Details" avec l'ID du livre
+      onPress={() => navigation.navigate("Details", { bookId: item.id })} // Navigue vers l'écran "Details" avec l'ID du livre
       style={styles.bookItemButton}
     >
       <View style={styles.bookItem}>
