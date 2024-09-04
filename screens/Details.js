@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, FlatList, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import axios from "axios";
 
 const DetailsScreen = ({ route, navigation }) => {
   const { bookId } = route.params;
@@ -17,24 +17,24 @@ const DetailsScreen = ({ route, navigation }) => {
 
   const deleteBook = async (bookId) => {
     try {
-      const storedBooks = await AsyncStorage.getItem('books');
-      const books = JSON.parse(storedBooks) || [];
-      const updatedBooks = books.filter((b) => b.id !== bookId);
-      await AsyncStorage.setItem('books', JSON.stringify(updatedBooks));
-      navigation.navigate('Home');
+      await axios.delete(`http://192.168.1.19:5000/books/${bookId}`);
+      navigation.navigate("Home");
     } catch (error) {
-      console.log('Erreur lors de la suppression du livre', error);
+      console.log("Une erreur est survenue lors de la suppression du livre", error);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const storedBooks = await AsyncStorage.getItem("books");
-        const book = JSON.parse(storedBooks).find((b) => b.id == bookId);
-        if (book) {
-          setBook(book);
-          setBookInput(book);
+        const response = await axios.get(`http://192.168.1.19:5000/books/${bookId}`);
+        
+        if (response) {
+          console.log("RESPONSE DATA")
+          console.log(response.data)
+          console.log("RESPONSE DATA")
+          setBook(response.data)
+          setBookInput(response.data);
         } else {
           navigation.goBack();
         }
