@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 const UpdateScreen = ({ navigation }) => {
   const route = useRoute();
-  const [book, setBook] = useState([]);
+  const [book, setBook] = useState(null);
+  const [bookInput, setBookInput] = useState({
+    id: "",
+    title: "",
+    author: "",
+    year: "",
+    description: "",
+    cover: "",
+  });
   const { bookId } = route.params;
 
   useEffect(() => {
@@ -15,6 +23,7 @@ const UpdateScreen = ({ navigation }) => {
         const book = JSON.parse(storedBooks).find((b) => b.id === bookId);
         if (book) {
           setBook(book);
+          setBookInput(book);
         } else {
           navigation.goBack();
         }
@@ -28,10 +37,74 @@ const UpdateScreen = ({ navigation }) => {
 
     fetchBook();
   }, []);
+
+  const handleChange = (key, value) => {
+    setBookInput({ ...bookInput, [key]: value });
+  };
+
+  const updateBook = async () => {
+    try {
+      const storedBooks = await AsyncStorage.getItem("books");
+      const books = JSON.parse(storedBooks);
+      const updatedBooks = books.map((b) => {
+        if (b.id === bookInput.id) {
+          return bookInput;
+        } else {
+          return b;
+        }
+      });
+      await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
+      navigation.goBack();
+    } catch (error) {
+      console.log(
+        "Une erreur est survenue lors de la mise à jour du livre",
+        error
+      );
+    }
+  };
   return (
     <View style={styles.container}>
-      <Text>{book.title}</Text>
-      <Text>{book.author}</Text>
+      <Text style={styles.header}>Mettre à jour le livre</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Titre"
+        value={bookInput.title}
+        onChangeText={(value) => handleChange("title", value)}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Auteur"
+        value={bookInput.author}
+        onChangeText={(value) => handleChange("author", value)}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Année de publication"
+        value={bookInput.year}
+        onChangeText={(value) => handleChange("year", value)}
+        keyboardType="numeric"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Description"
+        value={bookInput.description}
+        onChangeText={(value) => handleChange("description", value)}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="URL de l'image de couverture"
+        value={bookInput.cover}
+        onChangeText={(value) => handleChange("cover", value)}
+      />
+
+      <Button title="Mise à jour" onPress={updateBook} />
+
+      <Text style={styles.templateAuthor}>Stylisé par Damien</Text>
     </View>
   );
 };
@@ -54,7 +127,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
   },
-  coverImage: {
+  cover: {
     width: 60,
     height: 90,
     marginRight: 16,
@@ -86,6 +159,13 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "#fff",
     fontSize: 18,
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    marginBottom: 10,
   },
 });
 

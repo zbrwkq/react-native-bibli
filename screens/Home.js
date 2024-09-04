@@ -64,7 +64,7 @@ const HomeScreen = ({ navigation }) => {
           <Button
             title="Modifier"
             onPress={() =>
-              navigation.navigate("Update", {
+              navigation.navigate("UpdateBook", {
                 bookId: item.id,
               })
             }
