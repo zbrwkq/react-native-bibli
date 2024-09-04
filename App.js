@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./screens/Home";
 import UpdateScreen from "./screens/Update";
 import AddBookScreen from "./screens/AddBookScreen";
+import DetailsScreen from "./screens/Details";
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,11 @@ const App = () => {
           name="AddBook"
           component={AddBookScreen}
           options={{ title: "Ajouter un livre" }}
+        />
+        <Stack.Screen
+          name="Details"
+          component={DetailsScreen}
+          options={{ title: 'Détails' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

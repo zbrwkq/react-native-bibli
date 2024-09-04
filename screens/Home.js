@@ -55,24 +55,29 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const renderBookItem = ({ item }) => (
-    <View style={styles.bookItem}>
-      <Image source={{ uri: item.cover }} style={styles.coverImage} />
-      <View style={styles.bookDetails}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.author}>par {item.author}</Text>
-        <View style={styles.buttons}>
-          <Button
-            title="Modifier"
-            onPress={() =>
-              navigation.navigate("UpdateBook", {
-                bookId: item.id,
-              })
-            }
-          />
-          <Button title="Supprimer" onPress={() => confirmDelete(item.id)} />
+    <TouchableOpacity
+    onPress={() => navigation.navigate('Details', { bookId: item.id })} // Navigue vers l'écran "Details" avec l'ID du livre
+    style={styles.bookItemButton}
+    >
+      <View style={styles.bookItem}>
+        <Image source={{ uri: item.cover }} style={styles.coverImage} />
+        <View style={styles.bookDetails}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.author}>par {item.author}</Text>
+          <View style={styles.buttons}>
+            <Button
+              title="Modifier"
+              onPress={() =>
+                navigation.navigate("UpdateBook", {
+                  bookId: item.id,
+                })
+              }
+            />
+            <Button title="Supprimer" onPress={() => confirmDelete(item.id)} />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
