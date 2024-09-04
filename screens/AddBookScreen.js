@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Image, Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 
 export default function AddBookScreen({ navigation }) {
   const [title, setTitle] = useState("");
@@ -20,32 +19,25 @@ export default function AddBookScreen({ navigation }) {
       };
 
       try {
-        const storedBooks = await AsyncStorage.getItem("books");
-        const books = storedBooks ? JSON.parse(storedBooks) : [];
-        
-        const lastId = books.length ? Math.max(...books.map(book => book.id)) : 0;
-        const newId = lastId + 1;
-        newBook.id = newId;
-        
-        const updatedBooks = [...books, newBook];
-        await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
+        await axios.post('http://192.168.0.140:5000/books', newBook);
 
         setTitle("");
         setAuthor("");
         setYear("");
         setDescription("");
         setCover("");
+
         navigation.goBack();
       } catch (error) {
         console.error("Erreur lors de l'enregistrement des livres", error);
       }
     } else {
-    Alert.alert(
-      "Champs Manquants",
-      "Veuillez remplir tous les champs avant d'ajouter le livre.",
-      [{ text: "OK" }]
-    );
-  }
+      Alert.alert(
+        "Champs Manquants",
+        "Veuillez remplir tous les champs avant d'ajouter le livre.",
+        [{ text: "OK" }]
+      );
+    }
   };
 
   return (
