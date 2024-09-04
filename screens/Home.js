@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await axios.get('http://192.168.1.19:5000/books');
+        const response = await axios.get('http://192.168.1.102:5000/books');
         setBooks(response.data);
       } catch (error) {
         console.log("Une erreur est survenue lors de la récupération des livres", error);

@@ -17,7 +17,7 @@ const DetailsScreen = ({ route, navigation }) => {
 
   const deleteBook = async (bookId) => {
     try {
-      await axios.delete(`http://192.168.1.19:5000/books/${bookId}`);
+      await axios.delete(`http://192.168.1.102:5000/books/${bookId}`);
       navigation.navigate("Home");
     } catch (error) {
       console.log("Une erreur est survenue lors de la suppression du livre", error);
@@ -27,7 +27,7 @@ const DetailsScreen = ({ route, navigation }) => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const response = await axios.get(`http://192.168.1.19:5000/books/${bookId}`);
+        const response = await axios.get(`http://192.168.1.102:5000/books/${bookId}`);
         
         if (response) {
           setBook(response.data)
