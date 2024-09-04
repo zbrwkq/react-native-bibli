@@ -19,7 +19,7 @@ export default function AddBookScreen({ navigation }) {
       };
 
       try {
-        await axios.post('http://192.168.0.102:5000/books', newBook);
+        await axios.post('http://192.168.1.102:5000/books', newBook);
 
         setTitle("");
         setAuthor("");
