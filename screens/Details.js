@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, FlatList, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Assurez-vous d'importer AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DetailsScreen = ({ route, navigation }) => {
   const { bookId } = route.params;
