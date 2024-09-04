@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Image } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, Image, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AddBookScreen({ navigation }) {
@@ -10,13 +10,7 @@ export default function AddBookScreen({ navigation }) {
   const [cover, setCover] = useState("");
 
   const addBook = async () => {
-    if (
-      title.trim() &&
-      author.trim() &&
-      year.trim() &&
-      description.trim() &&
-      cover.trim()
-    ) {
+    if (title.trim() && author.trim() && year.trim() && description.trim() && cover.trim()) {
       const newBook = {
         title,
         author,
@@ -28,13 +22,11 @@ export default function AddBookScreen({ navigation }) {
       try {
         const storedBooks = await AsyncStorage.getItem("books");
         const books = storedBooks ? JSON.parse(storedBooks) : [];
-
-        const lastId = books.length
-          ? Math.max(...books.map((book) => book.id))
-          : 0;
+        
+        const lastId = books.length ? Math.max(...books.map(book => book.id)) : 0;
         const newId = lastId + 1;
         newBook.id = newId;
-
+        
         const updatedBooks = [...books, newBook];
         await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
 
@@ -47,7 +39,13 @@ export default function AddBookScreen({ navigation }) {
       } catch (error) {
         console.error("Erreur lors de l'enregistrement des livres", error);
       }
-    }
+    } else {
+    Alert.alert(
+      "Champs Manquants",
+      "Veuillez remplir tous les champs avant d'ajouter le livre.",
+      [{ text: "OK" }]
+    );
+  }
   };
 
   return (
@@ -91,19 +89,11 @@ export default function AddBookScreen({ navigation }) {
       />
 
       <Button title="Ajouter" onPress={addBook} />
-
-      <Text style={styles.templateAuthor}>Stylisé par Nathan</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  templateAuthor: {
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-    paddingVertical: 16,
-  },
   container: {
     flex: 1,
     padding: 20,
@@ -121,11 +111,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 8,
     marginBottom: 10,
-  },
-  coverImage: {
-    width: 100,
-    height: 150,
-    marginVertical: 10,
-    alignSelf: "center",
   },
 });
