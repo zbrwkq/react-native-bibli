@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, StyleSheet, TextInput, Button } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import axios from "axios";
 
 const UpdateScreen = ({ navigation }) => {
   const route = useRoute();
@@ -17,25 +17,22 @@ const UpdateScreen = ({ navigation }) => {
   const { bookId } = route.params;
 
   useEffect(() => {
-    const fetchBook = async () => {
+    const fetchBooks = async () => {
       try {
-        const storedBooks = await AsyncStorage.getItem("books");
-        const book = JSON.parse(storedBooks).find((b) => b.id === bookId);
-        if (book) {
-          setBook(book);
-          setBookInput(book);
-        } else {
-          navigation.goBack();
-        }
+        const response = await axios.get(
+          "http://192.168.1.20:5000/books/" + bookId
+        );
+        setBook(response.data);
+        setBookInput(response.data);
       } catch (error) {
         console.log(
-          "Une erreur est survenue lors de la récupération des livres",
+          "Une erreur est survenue lors de la récupération du livre",
           error
         );
       }
     };
 
-    fetchBook();
+    fetchBooks();
   }, []);
 
   const handleChange = (key, value) => {
@@ -44,20 +41,14 @@ const UpdateScreen = ({ navigation }) => {
 
   const updateBook = async () => {
     try {
-      const storedBooks = await AsyncStorage.getItem("books");
-      const books = JSON.parse(storedBooks);
-      const updatedBooks = books.map((b) => {
-        if (b.id === bookInput.id) {
-          return bookInput;
-        } else {
-          return b;
-        }
-      });
-      await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
-      navigation.goBack();
+      const response = await axios.put(
+        "http://192.168.1.20:5000/books/" + bookId,
+        bookInput
+      );
+      setBook(response.data);
     } catch (error) {
       console.log(
-        "Une erreur est survenue lors de la mise à jour du livre",
+        "Une erreur est survenue lors de la mise a jour du livre",
         error
       );
     }
